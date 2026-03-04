@@ -1,73 +1,145 @@
-# React + TypeScript + Vite
+# ⚡ Limited Drop Page – Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A high-performance React + TypeScript frontend for handling limited stock drops with real-time updates and optimistic UI.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🎯 Project Goals
 
-## React Compiler
+* Real-time stock refresh
+* Prevent duplicate reservations
+* Show 5-minute countdown after reservation
+* Handle race conditions gracefully
+* Optimistic UI for instant feedback
+* Strict TypeScript architecture
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+---
 
-## Expanding the ESLint configuration
+## 🏗 Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+* React
+* TypeScript (Strict Mode)
+* Redux Toolkit
+* RTK Query
+* Optimistic UI Updates
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## 📁 Folder Structure
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+src/
+│
+├── app/
+│   └── store.ts
+│
+├── features/
+│   └── drop/
+│       ├── dropApi.ts
+│       ├── types.ts
+│       └── LimitedDropPage.tsx
+│
+├── hooks/
+│   └── useCountdown.ts
+│
+├── components/
+│   ├── StockBadge.tsx
+│   ├── ReserveButton.tsx
+│   └── CountdownTimer.tsx
+│
+└── App.tsx
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 🔥 Key Features
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 🟢 Real-Time Stock Updates
+
+* Uses RTK Query polling (every 5 seconds)
+
+### ⚡ Optimistic Reservation
+
+* Stock decreases immediately in UI
+* Automatically rolls back on API failure
+
+### ⏳ Countdown Timer
+
+* 5-minute reservation timer
+* Automatically detects expiration
+
+### 🚫 Edge Case Handling
+
+* Race condition failures
+* Stock becomes zero while viewing
+* Network/API timeout errors
+* Duplicate reservation prevention
+
+---
+
+## 🛠 Installation
+
+```bash
+npm install
 ```
+
+---
+
+## 🚀 Run Development
+
+```bash
+npm run dev
+```
+
+---
+
+## 🧠 Architecture Decisions
+
+### RTK Query Instead of Axios
+
+* Built-in caching
+* Automatic re-fetch
+* Easy optimistic updates
+* Tag-based invalidation
+
+### Optimistic UI Pattern
+
+Uses `onQueryStarted`:
+
+* Updates stock immediately
+* Rolls back if backend rejects
+* Provides instant user feedback
+
+---
+
+## 🔄 Data Flow
+
+```
+User Click Reserve
+        ↓
+Optimistic UI Update
+        ↓
+API Request Sent
+        ↓
+Success → Confirm
+Failure → Rollback
+```
+
+---
+
+## 🎨 UX Behavior
+
+* Disable button when sold out
+* Show loading state while reserving
+* Show countdown after reservation
+* Show expiration message automatically
+
+---
+=gi
+
+---
+
+
+
+
+
